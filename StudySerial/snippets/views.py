@@ -12,6 +12,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework import generics
 
 #TO-DO
 #  HTTPS의 경우, Django RestFrameWork에서 바로 사용할 수 있는 지 확인 필요
@@ -99,14 +102,8 @@ def snippet_detail_api(request,pk, format=None):
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
-
+# Class 형태의 API 리스트 
+# Using Mixins에 대한 공부 필요
 class SnippetList(APIView):
     def get(self, request, format=None):
         snippets = Snippet.objects.all()
@@ -144,3 +141,12 @@ class SnippetDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# 최종 Class 형태 > Generic class-based Views
+class SnippetListGeneric(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+class SnippetDetailGeneric(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer

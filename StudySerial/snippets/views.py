@@ -143,6 +143,9 @@ class SnippetDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # 최종 Class 형태 > Generic class-based Views
+# 위의 Class 형태를 일반적인 Generics 형태로 풀어낸 것 [Create, Retrieve, Update, Delete]
+# 아직 어떻게 해야하는 지 이해가 안감 (세부적인 클래스 정의나 기능 정의가 필요하다면(?))
+# 참고 예시 링크 : https://www.geeksforgeeks.org/class-based-generic-views-django-create-retrieve-update-delete/
 class SnippetListGeneric(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
